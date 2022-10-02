@@ -10,3 +10,8 @@ class Choice(models.Model):
     choice_text = models.CharField(max_length=200)
     def __str__(self):
         return self.choice_text
+class Url(models.Model):
+    choice = models.ForeignKey(Choice, on_delete=models.CASCADE)
+    url_text = models.CharField(max_length=500)
+    def __str__(self):
+        return self.url_text

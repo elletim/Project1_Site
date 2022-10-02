@@ -25,3 +25,4 @@ def getdata(request):
     #data = pivot.to_html()
     #return HttpResponse(data)
     return render(request, 'polls/getdata.html', context)
+
