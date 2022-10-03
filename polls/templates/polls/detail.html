@@ -2,12 +2,27 @@
     {% csrf_token %}
     <fieldset>
         <legend><h1>{{ question.question_text }}</h1></legend>
+        
+        <label for="question">{{ question.question_text }}</label><br>
+        <select name="choice" id= "choice.id">
+            {% for choice in question.choice_set.all %}
+            <option value ="choice.choice_text">{{ choice.choice_text }}</option>
+            {% endfor %}
+        </select>
+
+    </fieldset>
+    <input type="submit" value="Vote">
+</form>
+    
+
+<!--<form action="{% url 'vote' question.id %}" method="post">
+    {% csrf_token %}
+    <fieldset>
+        <legend><h1>{{ question.question_text }}</h1></legend>
         {% for choice in question.choice_set.all %}
             <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
             <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
         {% endfor %}
     </fieldset>
     <input type="submit" value="Vote">
-    </form>
-    
-
+</form>-->

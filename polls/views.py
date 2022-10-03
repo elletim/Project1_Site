@@ -34,13 +34,13 @@ def detail(request, question_id):
     question = Question.objects.get(pk=question_id)
     return render(request, 'polls/detail.html', {'question':question})
     
-
+def vote(request, question_id):
+    question = Question.objects.get(pk=question_id)
+    selected_choice = question.choice_set.get(choice_text=request.POST['choice'])
+    selected_choice.save()
+    return HttpResponseRedirect(reverse('results', args=(question.id,)))
+    
 def results(request, question_id):
     question = Question.objects.get(pk=question_id)
     return render(request, 'polls/results.html', {'question': question})
 
-def vote(request, question_id):
-    question = Question.objects.get(pk=question_id)
-    selected_choice = question.choice_set.get(pk=request.POST['choice'])
-    selected_choice.save()
-    return HttpResponseRedirect(reverse('results', args=(question.id,)))
