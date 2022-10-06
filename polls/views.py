@@ -6,6 +6,7 @@ from io import StringIO
 from .models import Choice, Question
 from django.template import loader
 from django.urls import reverse
+import json
 
 
 
@@ -37,6 +38,7 @@ def detail(request, question_id):
 def vote(request, question_id):
     question = Question.objects.get(pk=question_id)
     selected_choice = question.choice_set.get(pk=request.POST['choice'])
+    selected_choice.save()
     urlname = selected_choice.choice_url
     page = req.get(urlname)
     page_df= pd.read_csv(StringIO(page.text),skiprows=10,sep='\t')
@@ -47,14 +49,9 @@ def vote(request, question_id):
     page_df = page_df["PM2.5"].mean()
     df = pd.DataFrame(data=page_df)
     pivot = df.pivot_table(columns="Year",index="Month",values="PM2.5")
-    data = pivot.to_html()
-    #context = { 'data': data, 'selected_choice': selected_choice, }
-    return HttpResponse(data)
-    #return render(request, 'polls/vote.html', context)
-    # return HttpResponseRedirect(reverse('results', args=(question.id,)),context)
-
-#not currently using this
-def results(request, question_id):
-    url = request.POST['urlname']
-    return render(request, 'polls/results.html', {'url': url})
+    #pivot = pivot.to_html()
+    data_json = pivot.to_json(orient="table")
+    context= { 'data_json' : data_json, 'question' : question, }
+    #return HttpResponse(data_json)
+    return render(request, 'polls/vote.html', context)
 

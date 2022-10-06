@@ -1,5 +1,20 @@
 <h1>Average PM2.5 Levels</h1>
 
-{{ data }}
+<canvas id = "PM25" width="300" height="300"></canvas>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js">
+const ctx = document.getElementById('PM25').getContext('2d')
+const PM25 = new Chart(ctx, {
+    type: 'line',
+    data: {
+        {{ data_json }}
+    }
+}
+   
+
+</script>
+
 
 <a href="{% url 'detail' question.id %}">Choose a new city?</a>
+ 
