@@ -1,4 +1,4 @@
-<h1>Monthly PM2.5 Levels: COVID Comparison</h1>
+<!-- <h1>Monthly PM2.5 Levels: COVID Comparison</h1>
 <div>
     <canvas id="myChart"></canvas>
 </div>
@@ -32,7 +32,65 @@
       document.getElementById('myChart'),
       config
     );
-</script>
+</script> -->
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.0/dist/echarts.min.js"></script>
+  </head>
+  <body>
+    <div id="main" style="width: 1000px;height:500px;"></div>
+    <script type="text/javascript">
+        var myChart = echarts.init(document.getElementById('main'));
+        var option = {
+            title: {
+                text: "{{ city }}",
+                left: 'center'
+            },
+            tooltip: {
+                trigger: 'axis'
+            },
+            grid: {
+                left: '5%',
+                right: '15%',
+                bottom: '10%'
+            },
+            xAxis: {
+            type: 'category',
+            axisLabel: {
+                rotate: 40
+            },
+            data: {{ x|safe }}
+            }, 
+            yAxis: {},
+            toolbox: {
+                right: 10,
+                feature: {
+                    dataZoom: {
+                        yAxisIndex: 'none'
+                },
+                restore: {},
+                saveAsImage: {}
+                }
+            },
+            series: [
+            {
+                name: 'pm2.5 level',
+                type: 'bar',
+                data : {{ y }}
+            }, 
+            {
+                name: 'average pm2.5 level',
+                type: 'line',
+                data: {{ avg }}
+            }
+        ]
+        };
+        myChart.setOption(option);
+
+    </script>
+  </body>
+</html>
 
 <a href="{% url 'detail' question.id %}">Choose a new city?</a>
  

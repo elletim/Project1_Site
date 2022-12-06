@@ -6,6 +6,8 @@ from io import StringIO
 from .models import Choice, Question
 from django.urls import reverse
 import json
+import statistics 
+
 
 #page that displays question text for poll
 def detail(request, question_id): 
@@ -26,10 +28,13 @@ def vote(request, question_id):
     page_df = page_df["PM2.5"].mean()
     df = pd.DataFrame(data=page_df)
     y = df["PM2.5"].to_list()
+    y = [round(i,2) for i in y]
+    avg = statistics.mean(y)
+    avg = [avg] * len(y)
     x = df.index.values
     x = list(x)
     x = [str(i) for i in x]
     x = [i.replace(',','/').replace(' ','') for i in x]
-    context= { 'data_json' : y, 'x': json.dumps(x), 'question' : question, 'city': selected_choice, }
+    context= { 'y' : y, 'x': json.dumps(x), 'question' : question, 'city': selected_choice,'avg': avg }
     return render(request, 'polls/vote.html', context)
 
